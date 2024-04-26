@@ -1,9 +1,13 @@
 #!/bin/bash
 
 NAMESPACE="metallb-system"
-NEW_CSV="metallb-operator.4.12.0-202311220908"
 CURRENT_CSV=$(oc get csv -n "$NAMESPACE" --no-headers | awk '{print $1}')
 
+if [ -n "$1" ]; then
+    NEW_CSV="$1"
+else
+    NEW_CSV="metallb-operator.4.12.0-202311220908"
+fi
 
 SUBSCRIPTION_YAML='
 apiVersion: operators.coreos.com/v1alpha1
