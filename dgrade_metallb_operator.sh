@@ -37,12 +37,13 @@ echo "$SUBSCRIPTION_YAML" | oc apply -f - &> /dev/null
 
 sleep 10
 
-INSTALLPLAN=$(oc get installplan -n "$NAMESPACE" --no-headers | awk '{print $1}')
+INSTALLPLAN=$(oc get installplan -n "$NAMESPACE" --no-headers | grep "$NEW_CSV" | awk '{print $1}')
 if [ -n "$INSTALLPLAN" ]; then
     echo "Approving InstallPlan..."
     oc patch installplan "$INSTALLPLAN" -n "$NAMESPACE" --type merge -p '{"spec":{"approved":true}}' &> /dev/null
 fi
 
+sleep 10
 echo "Script completed successfully!"
 echo "Installed CSV (after script execution):"
 echo $CURRENT_CSV
